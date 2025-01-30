@@ -13,6 +13,7 @@ const Signup = () => {
 
     const handleSignup = (e) => {
         e.preventDefault();
+        
         console.group("User Signup Data");
         console.log("Full Name:", fullName);
         console.log("Email:", email);
@@ -21,78 +22,86 @@ const Signup = () => {
     };
 
     return (
-        <div className="flex items-center justify-center h-screen bg-dark-100">
-            <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-
-                <div className="w-full bg-dark rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
-                    <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                        <h1 className="text-xl font-bold leading-tight tracking-tight text-dark-900 md:text-2xl dark:text-dark">
-                            Sign in to your account
-                        </h1>
-                        <form className="space-y-4 md:space-y-6" action="#">
-                            <InputFeild
-                                lable={"Email Address"}
-                                htmlFor={"email"}
-                                type={"email"}
-                                name={"email"}
-                                id={"email"}
-                                placeholder={"Email Address"}
-                                required={true}
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-
-                            <InputFeild
-                                lable={"Full Name"}
-                                htmlFor={"fullName"}
-                                type={"text"}
-                                name={"fullName"}
-                                id={"fullName"}
-                                placeholder={"Name"}
-                                required={true}
-                                value={fullName}
-                                onChange={(e) => setFullName(e.target.value)}
-                            />
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-start">
-                                    <div className="flex items-center h-5">
-                                        <input
-                                            id="remember"
-                                            aria-describedby="remember"
-                                            type="checkbox"
-                                            className="w-4 h-4 border border-dark-300 rounded bg-dark-50 focus:ring-3 focus:ring-primary-300 dark:bg-dark-700 dark:border-dark-600 dark:focus:ring-primary-600 dark:ring-offset-dark-800"
-                                            required=""
-                                        />
-                                    </div>
-                                    <div className="ml-3 text-sm">
-                                        <label
-                                            htmlFor="remember"
-                                            className="text-dark-900 dark:text-dark"
-                                        >
-                                            Remember me
-                                        </label>
-                                    </div>
-                                </div>
-                                <span
-                                    href="#"
-                                    className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
-                                >
-                                    Forgot password?
-                                </span>
-                            </div>
-                            <Button type={"Sumbit"} lable={"Sign In"} />
-                            <p className="font-medium text-primary-600 hover:underline dark:text-primary-500">
-                                Don’t have an account yet? {"     "}
-                                <Link to="/signup" className="text-primary-600 hover:underline dark:text-primary-500">
-
-                                    Sign up
-                                </Link>
-                            </p>
-                        </form>
-                    </div>
+        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+            <div className="w-full max-w-md p-8 bg-white border border-gray-300 rounded-lg shadow-lg">
+                <div className="text-center mb-6">
+                    <h2 className="text-3xl font-bold">Create an Account</h2>
+                    <p className="text-gray-500">Please fill in the details below 👋</p>
                 </div>
-            </div>
 
+                <form onSubmit={handleSignup} className="space-y-6">
+                    <InputFeild
+                        type="text"
+                        name="fullName"
+                        id="fullName"
+                        placeholder="Full Name"
+                        required={true}
+                        htmlFor="fullName"
+                        lable="Full Name"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                    />
+
+                    <InputFeild
+                        type="email"
+                        name="email"
+                        id="email"
+                        placeholder="Email"
+                        required={true}
+                        htmlFor="email"
+                        lable="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+
+                    <div className="relative">
+                        <InputFeild
+                            type={showPassword ? "text" : "password"}
+                            name="password"
+                            id="password"
+                            placeholder="Password"
+                            required={true}
+                            htmlFor="password"
+                            lable="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <div
+                            className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer mt-3 text-gray-600 size-4"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            {showPassword ? <FaEye /> : <FaEyeSlash />}
+                        </div>
+                    </div>
+
+                    {error && <div className="text-red-500 text-sm">{error}</div>}
+
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                            <input
+                                id="remember"
+                                type="checkbox"
+                                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                            />
+                            <label htmlFor="remember" className="ml-2 text-sm text-gray-900">
+                                Remember me
+                            </label>
+                        </div>
+                        <Link to={"/forgetpassword"} className="text-sm text-blue-600 hover:underline">
+                            Forgot password?
+                        </Link>
+                    </div>
+
+                    <Button type="submit" lable="Sign In" />
+
+                    <p className="text-sm text-center text-gray-500">
+                        Don’t have an account yet?{" "}
+                        <Link to="/signup" className="text-blue-600 hover:underline">
+                            Sign up
+                        </Link>
+                    </p>
+                </form>
+            </div>
         </div>
     );
 };
