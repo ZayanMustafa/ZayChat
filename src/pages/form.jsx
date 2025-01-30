@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import InputFeild from "../components/inputfeild";
 import Button from "../components/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
     const [fullName, setFullName] = useState("");
@@ -10,15 +10,25 @@ const Signup = () => {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const history = useNavigate();
 
     const handleSignup = (e) => {
         e.preventDefault();
-        
         console.group("User Signup Data");
         console.log("Full Name:", fullName);
         console.log("Email:", email);
         console.log("Password:", password);
         console.groupEnd();
+
+        setIsSubmitting(true);
+        setFullName("");
+        setEmail("");
+        setPassword("");
+
+        setTimeout(() => {
+            history.push("/dashboard");
+        }, 2000);
     };
 
     return (
@@ -67,10 +77,10 @@ const Signup = () => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         <div
-                            className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer mt-3 text-gray-600 size-4"
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer mt-3 text-gray-500"
                             onClick={() => setShowPassword(!showPassword)}
                         >
-                            {showPassword ? <FaEye /> : <FaEyeSlash />}
+                            {showPassword ? <FaEye size={18} /> : <FaEyeSlash size={18} />}
                         </div>
                     </div>
 
@@ -87,12 +97,12 @@ const Signup = () => {
                                 Remember me
                             </label>
                         </div>
-                        <Link to={"/forgetpassword"} className="text-sm text-blue-600 hover:underline">
+                        <a href="#" className="text-sm text-blue-600 hover:underline">
                             Forgot password?
-                        </Link>
+                        </a>
                     </div>
 
-                    <Button type="submit" lable="Sign In" />
+                    <Button type="submit" lable={isSubmitting ? "Creating Account..." : "Sign In"} />
 
                     <p className="text-sm text-center text-gray-500">
                         Don’t have an account yet?{" "}
