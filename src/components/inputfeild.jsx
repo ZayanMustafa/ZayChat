@@ -1,24 +1,24 @@
 import React from "react";
 
-
-export default function InputFeild({ type , name , id , placeholder , required ,htmlFor, lable  }) {
-
+export default function InputFeild({ type, name, id, placeholder, required, htmlFor, lable, value, onChange }) {
     return (
-        <div className="relative z-0 w-full mb-5 group">
-            <input
-                type={type}
-                name={name}
-                id={id}
-                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder={placeholder}
-                required={required}
-            />
-            <label
-                htmlFor={htmlFor}
-                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-            >
-                {lable}
-            </label>
-        </div>
-    )
+        <div>
+        <label
+            htmlFor={htmlFor}
+            className="block mb-2 text-sm font-medium text-dark-900 dark:text-dark"
+        >
+            {lable}
+        </label>
+        <input
+            type={type}
+            value={value}
+            onChange={onChange}
+            name={name}
+            id={id}
+            placeholder={placeholder}
+            className="bg-dark-50 border border-dark-300 text-dark-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-dark-700 dark:border-dark-600 dark:placeholder-dark-400 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            required={required}
+        />
+    </div>
+    );
 }

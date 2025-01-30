@@ -1,27 +1,18 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom"; // Don't forget to import Link
 import InputFeild from "../components/inputfeild";
+import Button from "../components/button";
+import { Link } from "react-router-dom";
 
 const Signup = () => {
-    // State management for the form fields
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
 
-    // Handle form submission
     const handleSignup = (e) => {
-        e.preventDefault(); // Prevent page reload on submit
-
-        // Simple validation to check if all fields are filled
-        // if (!fullName || !email || !password) {
-        //     setError("Please fill in all fields.");
-        //     return;
-        // }
-
-        // If validation passes, show the form data in the console
+        e.preventDefault();
         console.group("User Signup Data");
         console.log("Full Name:", fullName);
         console.log("Email:", email);
@@ -30,77 +21,78 @@ const Signup = () => {
     };
 
     return (
-        <div className="flex items-center justify-center h-screen bg-gray-100">
-            <div className="w-full max-w-md p-8 bg-white border border-gray-300 rounded-lg shadow-lg">
-               
+        <div className="flex items-center justify-center h-screen bg-dark-100">
+            <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
 
-                <div className="text-center mt-8 mb-6">
-                    <h2 className="text-3xl font-bold">Create an Account</h2>
-                    <p className="text-gray-500">Unlock a World of Possibilities-Please Fill in the Details Below 👋 </p>
-                </div>
+                <div className="w-full bg-dark rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
+                    <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+                        <h1 className="text-xl font-bold leading-tight tracking-tight text-dark-900 md:text-2xl dark:text-dark">
+                            Sign in to your account
+                        </h1>
+                        <form className="space-y-4 md:space-y-6" action="#">
+                            <InputFeild
+                                lable={"Email Address"}
+                                htmlFor={"email"}
+                                type={"email"}
+                                name={"email"}
+                                id={"email"}
+                                placeholder={"Email Address"}
+                                required={true}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
 
-                <form onSubmit={handleSignup}>
-                    <InputFeild
-                        type="text"
-                        name="fullName"
-                        id="fullName"
-                        placeholder="Full Name"
-                        required={true}
-                        htmlFor="fullName"
-                        lable="Full Name"
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                    />
+                            <InputFeild
+                                lable={"Full Name"}
+                                htmlFor={"fullName"}
+                                type={"text"}
+                                name={"fullName"}
+                                id={"fullName"}
+                                placeholder={"Name"}
+                                required={true}
+                                value={fullName}
+                                onChange={(e) => setFullName(e.target.value)}
+                            />
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-start">
+                                    <div className="flex items-center h-5">
+                                        <input
+                                            id="remember"
+                                            aria-describedby="remember"
+                                            type="checkbox"
+                                            className="w-4 h-4 border border-dark-300 rounded bg-dark-50 focus:ring-3 focus:ring-primary-300 dark:bg-dark-700 dark:border-dark-600 dark:focus:ring-primary-600 dark:ring-offset-dark-800"
+                                            required=""
+                                        />
+                                    </div>
+                                    <div className="ml-3 text-sm">
+                                        <label
+                                            htmlFor="remember"
+                                            className="text-dark-900 dark:text-dark"
+                                        >
+                                            Remember me
+                                        </label>
+                                    </div>
+                                </div>
+                                <span
+                                    href="#"
+                                    className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
+                                >
+                                    Forgot password?
+                                </span>
+                            </div>
+                            <Button type={"Sumbit"} lable={"Sign In"} />
+                            <p className="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                                Don’t have an account yet? {"     "}
+                                <Link to="/signup" className="text-primary-600 hover:underline dark:text-primary-500">
 
-                    <InputFeild
-                        type="email"
-                        name="email"
-                        id="email"
-                        placeholder="Email"
-                        required={true}
-                        htmlFor="email"
-                        lable="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-
-                    <div className="relative z-0 w-full mb-5 group">
-                        <input
-                            type={showPassword ? "text" : "password"}
-                            name="password"
-                            id="password"
-                            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder="Password"
-                            required={true}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <label
-                            htmlFor="password"
-                            className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-                        >
-                            Password
-                        </label>
-                        <div
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
-                            onClick={() => setShowPassword(!showPassword)}
-                        >
-                            {showPassword ? <FaEye /> : <FaEyeSlash />}
-                        </div>
+                                    Sign up
+                                </Link>
+                            </p>
+                        </form>
                     </div>
-
-                    {error && <div className="text-red-500 text-sm mb-3">{error}</div>}
-
-                    <button type="submit" className="w-full px-4 py-2 bg-blue-600 text-white rounded-md">
-                        Submit
-                    </button>
-                </form>
-
-                <p className="mt-6 text-center text-gray-500">
-                    Already have an account?{" "}
-                    Login
-                </p>
+                </div>
             </div>
+
         </div>
     );
 };
