@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import InputFeild from "../components/inputfeild";
 import Button from "../components/button";
 import { Link, useNavigate } from "react-router-dom";
@@ -77,7 +77,7 @@ const Signup = () => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         <div
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer mt-3 text-gray-500"
+                            className="absolute right-3 mt-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
                             onClick={() => setShowPassword(!showPassword)}
                         >
                             {showPassword ? <FaEye size={18} /> : <FaEyeSlash size={18} />}
@@ -97,12 +97,21 @@ const Signup = () => {
                                 Remember me
                             </label>
                         </div>
-                        <a href="#" className="text-sm text-blue-600 hover:underline">
+                        <Link to="/forgotpassword" className="text-sm text-blue-600 hover:underline">
                             Forgot password?
-                        </a>
+                        </Link>
                     </div>
 
                     <Button type="submit" lable={isSubmitting ? "Creating Account..." : "Sign In"} />
+
+                    <div className="flex items-center my-4">
+                        <div className="flex-grow border-t border-gray-300"></div>
+                        <span className="mx-4 text-gray-500">OR</span>
+                        <div className="flex-grow border-t border-gray-300"></div>
+                    </div>
+
+
+                    <Button type="button" lable={"Sign In with Google"} />
 
                     <p className="text-sm text-center text-gray-500">
                         Don’t have an account yet?{" "}
