@@ -1,32 +1,8 @@
 import React, { useState } from "react";
 import { MessageInput } from "../components/massageInput";
+import SearchComponent from "../components/search";
+import { MESSAGES , USERS } from "../components/users";
 
-  const USERS = [
-  { id: 1, name: "Alice", avatar: "A" },
-  { id: 2, name: "Bob", avatar: "B" },
-  { id: 3, name: "Charlie", avatar: "C" },
-  { id: 4, name: "Diana", avatar: "D" },
-];
-
-// Example messages
-const MESSAGES = {
-  1: [
-    { from: "Alice", text: "Hey!" },
-    { from: "You", text: "Hey, how are you?" },
-  ],
-  2: [
-    { from: "Bob", text: "Hello!" },
-    { from: "You", text: "Hey Bob, what's up?" },
-  ],
-  3: [
-    { from: "Charlie", text: "Hi there!" },
-    { from: "You", text: "Hello Charlie!" },
-  ],
-  4: [
-    { from: "Diana", text: "Greetings!" },
-    { from: "You", text: "Hey Diana, nice to see you." },
-  ],
-};
 
 const ChatApp = () => {
   const [selectedUserId, setSelectedUserId] = useState(null);
@@ -63,13 +39,7 @@ const ChatApp = () => {
           </div>
 
           {/* Search */}
-          <div className="p-4">
-            <input
-              type="text"
-              placeholder="Search"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none"
-            />
-          </div>
+            <SearchComponent messages={MESSAGES} />
 
           {/* User List */}
           <div>

@@ -47,7 +47,7 @@ const Signup = () => {
                         placeholder="Full Name"
                         required={true}
                         htmlFor="fullName"
-                        lable="Full Name"
+                        lable="Full Name*"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                     />
@@ -59,7 +59,7 @@ const Signup = () => {
                         placeholder="Email"
                         required={true}
                         htmlFor="email"
-                        lable="Email"
+                        lable="Email*"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
@@ -72,7 +72,7 @@ const Signup = () => {
                             placeholder="Password"
                             required={true}
                             htmlFor="password"
-                            lable="Password"
+                            lable="Password*"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
@@ -110,8 +110,9 @@ const Signup = () => {
                         <div className="flex-grow border-t border-gray-300"></div>
                     </div>
 
-
+                    <Link to={"/googleauth"}>
                     <Button type="button" lable={"Sign In with Google"} />
+                    </Link>
 
                     <p className="text-sm text-center text-gray-500">
                         Don’t have an account yet?{" "}
