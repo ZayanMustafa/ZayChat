@@ -5,6 +5,7 @@ import { MESSAGES, USERS } from "../components/users";
 import UserList from "../components/userlist";
 import ChatMessages from "../components/chatmassage";
 import Title from "../components/title";
+import NoUserSelected from "./nouser";
 
 
 const ChatApp = () => {
@@ -37,7 +38,7 @@ const ChatApp = () => {
           `}
         >
           {/* App Title */}
-            <Title />
+          <Title />
 
           {/* Search */}
           <SearchComponent messages={MESSAGES} />
@@ -69,12 +70,18 @@ const ChatApp = () => {
                 : "No user selected"}
             </div>
           </div>
+          {selectedUserId ? (
+            <>
+              {/* Chat Messages */}
+              <ChatMessages messages={selectedMessages} />
 
-          {/* Chat Messages */}
-          <ChatMessages messages={selectedMessages}/>
+              {/* Message Input */}
+              <MessageInput onSendMessage={HandleSumbit} />
+            </>
+          ) : (
+            <NoUserSelected />
+          )}
 
-          {/* Message Input */}
-          <MessageInput onSendMessage={HandleSumbit} />
         </div>
       </div>
     </div>
