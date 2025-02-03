@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { MessageInput } from "../components/massageInput";
 import SearchComponent from "../components/search";
-import { MESSAGES , USERS } from "../components/users";
+import { MESSAGES, USERS } from "../components/users";
+import UserList from "../components/userlist";
 
 
 const ChatApp = () => {
@@ -14,7 +15,7 @@ const ChatApp = () => {
   const handleBackToUsers = () => {
     setSelectedUserId(null);
   };
-  const HandleSumbit = () =>{
+  const HandleSumbit = () => {
     alert("Hasan")
   }
 
@@ -35,27 +36,16 @@ const ChatApp = () => {
         >
           {/* App Title */}
           <div className="bg-yellow-400 text-black p-4 font-bold">
-            chat app by zayyan
+              Zayyan Mustafa
           </div>
 
           {/* Search */}
-            <SearchComponent messages={MESSAGES} />
+          <SearchComponent messages={MESSAGES} />
 
           {/* User List */}
-          <div>
-            {USERS.map((user) => (
-              <div
-                key={user.id}
-                className="flex items-center p-4 border-b border-gray-300 cursor-pointer hover:bg-gray-100"
-                onClick={() => handleSelectUser(user.id)}
-              >
-                <div className="w-10 h-10 flex items-center justify-center bg-yellow-500 text-black rounded-full mr-4">
-                  {user.avatar}
-                </div>
-                <div>{user.name}</div>
-              </div>
-            ))}
-          </div>
+          <UserList users={USERS} onSelectUser={handleSelectUser} />
+          {selectedUserId && <p>Selected User ID: {selectedUserId}</p>}
+
         </div>
 
         {/* Chat Section */}
@@ -92,9 +82,9 @@ const ChatApp = () => {
 
           {/* Message Input */}
           <MessageInput onSendMessage={HandleSumbit} />
-          </div>
         </div>
       </div>
+    </div>
   );
 };
 
