@@ -3,6 +3,8 @@ import { MessageInput } from "../components/massageInput";
 import SearchComponent from "../components/search";
 import { MESSAGES, USERS } from "../components/users";
 import UserList from "../components/userlist";
+import ChatMessages from "../components/chatmassage";
+import Title from "../components/title";
 
 
 const ChatApp = () => {
@@ -35,9 +37,7 @@ const ChatApp = () => {
           `}
         >
           {/* App Title */}
-          <div className="bg-yellow-400 text-black p-4 font-bold">
-              Zayyan Mustafa
-          </div>
+            <Title />
 
           {/* Search */}
           <SearchComponent messages={MESSAGES} />
@@ -71,14 +71,7 @@ const ChatApp = () => {
           </div>
 
           {/* Chat Messages */}
-          <div className="flex-1 p-4 overflow-y-auto">
-            {selectedMessages.map((msg, index) => (
-              <div key={index} className="mb-2">
-                <p className="font-semibold">{msg.from}</p>
-                <p className="text-gray-700">{msg.text}</p>
-              </div>
-            ))}
-          </div>
+          <ChatMessages messages={selectedMessages}/>
 
           {/* Message Input */}
           <MessageInput onSendMessage={HandleSumbit} />
