@@ -67,7 +67,7 @@ const ChatApp = () => {
               {/* Show the selected user’s name or a default */}
               {selectedUserId
                 ? USERS.find((user) => user.id === selectedUserId)?.name
-                : "No user selected"}
+                : "Select to start conversation"}
             </div>
           </div>
           {selectedUserId ? (
