@@ -39,20 +39,21 @@ const SearchComponent = ({ messages }) => {
       <div className="mt-4">
 
         {searchTerm && filteredNames.length === 0 ? (
-          <p>No names found</p>
+          <p className="text-gray-500" >No names found</p>
         ) : (
           searchTerm && 
           filteredNames.map((name, index) => (
             <div
               key={index}
               onClick={() => handleNameClick(name)}
-              className="cursor-pointer mb-2 text-blue-500 hover:underline"
+              className="cursor-pointer ms-4 mb-2 text-black-500 hover:underline"
             >
               {name}
             </div>
           ))
         )}
       </div>
+      {/* For Showing the messages in the search area */}
       {selectedMessages && selectedMessages.length > 0 && (
         <div className="mt-4">
           <h3>Messages from {selectedName}:</h3>
