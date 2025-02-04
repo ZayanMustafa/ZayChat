@@ -1,5 +1,5 @@
 import Loader from "../components/loader";
-import Form from "./form";
+import SignUp from "../components/signup";
 import { useState, useEffect } from "react";
 
 
@@ -15,7 +15,7 @@ export default function Main() {
 
     return (
         <div>
-            {loading ? <Loader /> : <Form />}
+            {loading ? <Loader /> :  <SignUp/>}
         </div>
     );
 }

@@ -1,21 +1,39 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
-import InputFeild from "../components/inputfeild";
-import Button from "../components/button";
+import InputFeild from "./inputfeild";
+import Button from "./button";
 import { Link, useNavigate } from "react-router-dom";
 
-const Signup = () => {
+const SignUp = () => {
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [passwordStrength, setPasswordStrength] = useState("");
     const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const history = useNavigate();
 
-    const handleSignup = (e) => {
+    // Password Strength Checker
+    const checkPasswordStrength = (password) => {
+        const lengthCriteria = password.length >= 8;
+        const upperCaseCriteria = /[A-Z]/.test(password);
+        const lowerCaseCriteria = /[a-z]/.test(password);
+        const numberCriteria = /[0-9]/.test(password);
+        const specialCharCriteria = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+        if (lengthCriteria && upperCaseCriteria && lowerCaseCriteria && numberCriteria && specialCharCriteria) {
+            setPasswordStrength("Strong");
+        } else if (lengthCriteria && (upperCaseCriteria || lowerCaseCriteria) && (numberCriteria || specialCharCriteria)) {
+            setPasswordStrength("Moderate");
+        } else {
+            setPasswordStrength("Weak");
+        }
+    };
+
+    const handleSignUp = (e) => {
         e.preventDefault();
-        console.group("User Signup Data");
+        console.group("User SignUp Data");
         console.log("Full Name:", fullName);
         console.log("Email:", email);
         console.log("Password:", password);
@@ -25,6 +43,7 @@ const Signup = () => {
         setFullName("");
         setEmail("");
         setPassword("");
+        setPasswordStrength(""); // Reset password strength
 
         setTimeout(() => {
             history.push("/dashboard");
@@ -39,7 +58,7 @@ const Signup = () => {
                     <p className="text-gray-500">Please fill in the details below 👋</p>
                 </div>
 
-                <form onSubmit={handleSignup} className="space-y-6">
+                <form onSubmit={handleSignUp} className="space-y-6">
                     <InputFeild
                         type="text"
                         name="fullName"
@@ -74,7 +93,10 @@ const Signup = () => {
                             htmlFor="password"
                             lable="Password*"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                                checkPasswordStrength(e.target.value);
+                            }}
                         />
                         <div
                             className="absolute right-3 mt-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
@@ -83,6 +105,15 @@ const Signup = () => {
                             {showPassword ? <FaEye size={18} /> : <FaEyeSlash size={18} />}
                         </div>
                     </div>
+
+                    {/* Display password strength */}
+                    {password && (
+                        <div className="mt-2 text-sm">
+                            <span className={`text-${passwordStrength === 'Weak' ? 'red' : passwordStrength === 'Moderate' ? 'yellow' : 'green'}-500`}>
+                                {passwordStrength} Password
+                            </span>
+                        </div>
+                    )}
 
                     {error && <div className="text-red-500 text-sm">{error}</div>}
 
@@ -97,12 +128,9 @@ const Signup = () => {
                                 Remember me
                             </label>
                         </div>
-                        <Link to="/forgotpassword" className="text-sm text-blue-600 hover:underline">
-                            Forgot password?
-                        </Link>
                     </div>
 
-                    <Button type="submit" lable={isSubmitting ? "Creating Account..." : "Sign In"} />
+                    <Button type="submit" lable={isSubmitting ? "Creating Account..." : "Sign Up"} />
 
                     <div className="flex items-center my-4">
                         <div className="flex-grow border-t border-gray-300"></div>
@@ -111,13 +139,13 @@ const Signup = () => {
                     </div>
 
                     <Link to={"/googleauth"}>
-                    <Button type="button" lable={"Sign In with Google"} />
+                        <Button type="button" lable={"Sign Up with Google"} />
                     </Link>
 
-                    <p className="text-sm text-center text-gray-500">
-                        Don’t have an account yet?{" "}
-                        <Link to="/signup" className="text-blue-600 hover:underline">
-                            Sign up
+                    <p className="text-sm text-center mt-2 text-gray-500">
+                        Already have an Account? {" "}
+                        <Link to="/signin" className="text-blue-600 hover:underline">
+                            Sign in
                         </Link>
                     </p>
                 </form>
@@ -126,4 +154,4 @@ const Signup = () => {
     );
 };
 
-export default Signup;
+export default SignUp;
