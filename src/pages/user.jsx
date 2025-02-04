@@ -5,7 +5,7 @@ import { MESSAGES, USERS } from "../components/users";
 import UserList from "../components/userlist";
 import ChatMessages from "../components/chatmassage";
 import Title from "../components/title";
-import NoUserSelected from "./nouser";
+import NoUserSelected from "../components/nouser";
 
 
 const ChatApp = () => {
@@ -67,7 +67,7 @@ const ChatApp = () => {
               {/* Show the selected user’s name or a default */}
               {selectedUserId
                 ? USERS.find((user) => user.id === selectedUserId)?.name
-                : "Select to start conversation"}
+                : 'Salaam'}
             </div>
           </div>
           {selectedUserId ? (
