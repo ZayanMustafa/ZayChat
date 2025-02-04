@@ -54,7 +54,7 @@ const SearchComponent = ({ messages }) => {
         )}
       </div>
       {/* For Showing the messages in the search area */}
-      {selectedMessages && selectedMessages.length > 0 && (
+      {/* {selectedMessages && selectedMessages.length > 0 && (
         <div className="mt-4">
           <h3>Messages from {selectedName}:</h3>
           {selectedMessages.map((message, index) => (
@@ -63,7 +63,7 @@ const SearchComponent = ({ messages }) => {
             </div>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 };

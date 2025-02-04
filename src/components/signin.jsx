@@ -88,7 +88,7 @@ const SignIn = () => {
                         </Link>
                     </div>
 
-                    <Button type="submit" lable={isSubmitting ? "Creating Account..." : "Sign Up"} />
+                    <Button type="submit" lable={isSubmitting ? "Sign Up" : "Sign Up"} />
 
                     <p className="text-sm text-center mt-2 text-gray-500">
                         Do not have Account? {" "}
