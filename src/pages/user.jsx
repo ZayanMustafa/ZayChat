@@ -42,10 +42,6 @@ const ChatApp = () => {
 
           {/* Search */}
           <SearchComponent messages={MESSAGES} users={USERS} onSelectUser={handleSelectUser} />
-
-
-
-
           
           {/* User List */}
           <UserList users={USERS} onSelectUser={handleSelectUser} />

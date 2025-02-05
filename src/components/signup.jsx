@@ -3,51 +3,91 @@ import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import InputFeild from "./inputfeild";
 import Button from "./button";
 import { Link, useNavigate } from "react-router-dom";
+import { auth, googleProvider, createUserWithEmailAndPassword, signInWithPopup, db, ref, set } from "../firebase/initializetion"; // Fixed the import
+import { use } from "react";
 
 const SignUp = () => {
-    const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
-    const [passwordStrength, setPasswordStrength] = useState("");
+    const [fullName, setFullName] = useState("");
     const [error, setError] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [passwordStrength, setPasswordStrength] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const history = useNavigate();
 
-    // Password Strength Checker
+    const navigate = useNavigate();
+
+    // Password Strength Check
     const checkPasswordStrength = (password) => {
-        const lengthCriteria = password.length >= 8;
-        const upperCaseCriteria = /[A-Z]/.test(password);
-        const lowerCaseCriteria = /[a-z]/.test(password);
-        const numberCriteria = /[0-9]/.test(password);
-        const specialCharCriteria = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+        const lengthCriteria = password.length >= 8; // Minimum length of 8
+        const upperCaseCriteria = /[A-Z]/.test(password); // At least one uppercase letter
+        const lowerCaseCriteria = /[a-z]/.test(password); // At least one lowercase letter
+        const numberCriteria = /\d/.test(password); // At least one number
+        const specialCharCriteria = /[!@#$%^&*(),.?":{}|<>]/.test(password); // At least one special character
 
-        if (lengthCriteria && upperCaseCriteria && lowerCaseCriteria && numberCriteria && specialCharCriteria) {
-            setPasswordStrength("Strong");
-        } else if (lengthCriteria && (upperCaseCriteria || lowerCaseCriteria) && (numberCriteria || specialCharCriteria)) {
-            setPasswordStrength("Moderate");
-        } else {
-            setPasswordStrength("Weak");
-        }
+        // Determine strength using ternary operators
+        const strength = lengthCriteria
+            ? upperCaseCriteria && lowerCaseCriteria && numberCriteria && specialCharCriteria
+                ? 'Strong'
+                : upperCaseCriteria || lowerCaseCriteria || numberCriteria || specialCharCriteria
+                    ? 'Moderate'
+                    : 'Weak'
+            : 'Password must be at least 8 characters long'; // Display message if password is too short
+
+        setPasswordStrength(strength);
     };
 
     const handleSignUp = (e) => {
         e.preventDefault();
-        console.group("User SignUp Data");
-        console.log("Full Name:", fullName);
-        console.log("Email:", email);
-        console.log("Password:", password);
-        console.groupEnd();
-
         setIsSubmitting(true);
-        setFullName("");
-        setEmail("");
-        setPassword("");
-        setPasswordStrength(""); // Reset password strength
+        setError("");
 
-        setTimeout(() => {
-            history.push("/dashboard");
-        }, 2000);
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                saveUserToDatabase(user, fullName, email);
+                navigate('/dashboard');  // Correctly use navigate to redirect
+            })
+            .catch((error) => {
+                setError(error.message);
+            })
+            .finally(() => {
+                setIsSubmitting(false);
+            });
+    };
+
+
+
+    const handleGoogleSignUp = () => {
+        setIsSubmitting(true);
+
+        signInWithPopup(auth, googleProvider)
+            .then((result) => {
+                const user = result.user;
+                saveUserToDatabase(user, user.displayName, user.email);
+            })
+            .catch((error) => {
+                setError(error.message);
+            })
+            .finally(() => {
+                setIsSubmitting(false);
+            });
+    };
+
+    const saveUserToDatabase = (user, fullName, email) => {
+        const userRef = ref(db, 'users/' + user.uid);
+        set(userRef, {
+            fullName: fullName,
+            email: email,
+            uid: user.uid,
+        })
+            .then(() => {
+                console.log("User data saved to database");
+                navigate("/dashboard");
+            })
+            .catch((error) => {
+                console.error("Error saving user data:", error.message);
+            });
     };
 
     return (
@@ -106,7 +146,6 @@ const SignUp = () => {
                         </div>
                     </div>
 
-                    {/* Display password strength */}
                     {password && (
                         <div className="mt-2 text-sm">
                             <span className={`text-${passwordStrength === 'Weak' ? 'red' : passwordStrength === 'Moderate' ? 'yellow' : 'green'}-500`}>
@@ -130,7 +169,9 @@ const SignUp = () => {
                         </div>
                     </div>
 
-                    <Button type="submit" lable={isSubmitting ? "Creating Account..." : "Sign Up"} />
+                    <Button type="submit"
+                        disabled={isSubmitting}
+                        lable={isSubmitting ? 'Signing Up...' : 'Sign Up'} />
 
                     <div className="flex items-center my-4">
                         <div className="flex-grow border-t border-gray-300"></div>
@@ -138,12 +179,16 @@ const SignUp = () => {
                         <div className="flex-grow border-t border-gray-300"></div>
                     </div>
 
-                    <Link to={"/googleauth"}>
-                        <Button type="button" lable={"Sign Up with Google"} />
-                    </Link>
+                    <Button
+                        // disabled={isSubmitting}
+                        type="button"
+                        lable={'Sign Up with Google'}
+                        onClick={handleGoogleSignUp}
+                        icon={<FaGoogle size={20} />}
+                    />
 
                     <p className="text-sm text-center mt-2 text-gray-500">
-                        Already have an Account? {" "}
+                        Already have an Account?{" "}
                         <Link to="/signin" className="text-blue-600 hover:underline">
                             Sign in
                         </Link>

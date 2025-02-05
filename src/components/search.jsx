@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 
-const SearchComponent = ({ messages , onSelectUser }) => {
+const SearchComponent = ({ messages, users, onSelectUser }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedName, setSelectedName] = useState(null);
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
@@ -11,24 +10,16 @@ const SearchComponent = ({ messages , onSelectUser }) => {
   const handleNameClick = (name) => {
     const user = users.find((user) => user.name === name);
     if (user) {
-      onSelectUser(user.id); // Navigate to chat when clicking on a searched user
+      onSelectUser(user.id);
+      setSearchTerm(""); // Clear the search input
     }
   };
 
-  const uniqueNames = Object.values(messages)
+  const filteredNames = Object.values(messages)
     .flat()
     .map((message) => message.from)
-    .filter((value, index, self) => self.indexOf(value) === index);
-
-  const filteredNames = uniqueNames.filter((name) =>
-    name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const selectedMessages =
-    selectedName &&
-    Object.values(messages)
-      .flat()
-      .filter((message) => message.from === selectedName);
+    .filter((value, index, self) => self.indexOf(value) === index)
+    .filter((name) => name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
     <div className="p-4">
@@ -40,11 +31,10 @@ const SearchComponent = ({ messages , onSelectUser }) => {
         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none"
       />
       <div className="mt-4">
-
         {searchTerm && filteredNames.length === 0 ? (
-          <p className="text-gray-500" >No names found</p>
+          <p className="text-gray-500">No names found</p>
         ) : (
-          searchTerm && 
+          searchTerm &&
           filteredNames.map((name, index) => (
             <div
               key={index}
@@ -56,7 +46,6 @@ const SearchComponent = ({ messages , onSelectUser }) => {
           ))
         )}
       </div>
-      
     </div>
   );
 };
