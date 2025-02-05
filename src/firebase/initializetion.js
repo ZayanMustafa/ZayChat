@@ -1,6 +1,5 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { getDatabase, ref, set } from "firebase/database";
 
@@ -12,17 +11,16 @@ const firebaseConfig = {
   storageBucket: "chatappbyzayyan.firebasestorage.app",
   messagingSenderId: "357803733196",
   appId: "1:357803733196:web:6858719c90e0adee6c1269",
-  measurementId: "G-M98CL9L9PG"
+  measurementId: "G-M98CL9L9PG",
+  databaseURL: "https://chatappbyzayyan-default-rtdb.asia-southeast1.firebasedatabase.app/" 
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Get authentication and Google provider
 const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider(); // Fixed: Use 'googleProvider' instead of 'GoogleAuthProvider'
+const googleProvider = new GoogleAuthProvider(); 
 
-// Initialize Firebase Realtime Database
 const db = getDatabase(app);
 
 // Export the necessary objects for use in other files

@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useState } from "react"; 
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import InputFeild from "./inputfeild";
 import Button from "./button";
 import { Link, useNavigate } from "react-router-dom";
 import { auth, googleProvider, createUserWithEmailAndPassword, signInWithPopup, db, ref, set } from "../firebase/initializetion"; // Fixed the import
-import { use } from "react";
 
 const SignUp = () => {
     const [email, setEmail] = useState("");
@@ -24,7 +23,7 @@ const SignUp = () => {
         const lowerCaseCriteria = /[a-z]/.test(password); // At least one lowercase letter
         const numberCriteria = /\d/.test(password); // At least one number
         const specialCharCriteria = /[!@#$%^&*(),.?":{}|<>]/.test(password); // At least one special character
-
+        
         // Determine strength using ternary operators
         const strength = lengthCriteria
             ? upperCaseCriteria && lowerCaseCriteria && numberCriteria && specialCharCriteria
@@ -37,43 +36,6 @@ const SignUp = () => {
         setPasswordStrength(strength);
     };
 
-    const handleSignUp = (e) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-        setError("");
-
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                saveUserToDatabase(user, fullName, email);
-                navigate('/dashboard');  // Correctly use navigate to redirect
-            })
-            .catch((error) => {
-                setError(error.message);
-            })
-            .finally(() => {
-                setIsSubmitting(false);
-            });
-    };
-
-
-
-    const handleGoogleSignUp = () => {
-        setIsSubmitting(true);
-
-        signInWithPopup(auth, googleProvider)
-            .then((result) => {
-                const user = result.user;
-                saveUserToDatabase(user, user.displayName, user.email);
-            })
-            .catch((error) => {
-                setError(error.message);
-            })
-            .finally(() => {
-                setIsSubmitting(false);
-            });
-    };
-
     const saveUserToDatabase = (user, fullName, email) => {
         const userRef = ref(db, 'users/' + user.uid);
         set(userRef, {
@@ -82,11 +44,45 @@ const SignUp = () => {
             uid: user.uid,
         })
             .then(() => {
-                console.log("User data saved to database");
                 navigate("/dashboard");
             })
             .catch((error) => {
                 console.error("Error saving user data:", error.message);
+            });
+    };
+
+    const handleSignUp = (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setError("");
+        
+        createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            saveUserToDatabase(user, fullName, email);  // Save to database after successful sign-up
+        })
+        .catch((error) => {
+            setError(error.message);
+        })
+        .finally(() => {
+            setIsSubmitting(false);
+        });
+    };
+
+    const handleGoogleSignUp = () => {
+        setIsSubmitting(true);
+
+        signInWithPopup(auth, googleProvider)
+            .then((result) => {
+                const user = result.user;
+                saveUserToDatabase(user, user.displayName, user.email);
+                navigate('/dashboard');  
+            })
+            .catch((error) => {
+                setError(error.message);
+            })
+            .finally(() => {
+                setIsSubmitting(false);
             });
     };
 
