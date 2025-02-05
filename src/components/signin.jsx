@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import InputFeild from "./inputfeild";
 import Button from "./button";
 import { Link, useNavigate } from "react-router-dom";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const SignIn = () => {
     const [email, setEmail] = useState("");
@@ -10,22 +11,24 @@ const SignIn = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const history = useNavigate();
+    const navigate = useNavigate(); 
 
-    const handleSignIn = (e) => {
+    const handleSignIn = async (e) => {
         e.preventDefault();
-        console.group("User SignIn Data");
-        console.log("Email:", email);
-        console.log("Password:", password);
-        console.groupEnd();
-
         setIsSubmitting(true);
-        setEmail("");
-        setPassword("");
-
-        setTimeout(() => {
-            history.push("/dashboard");
-        }, 2000);
+        setError(""); 
+        const auth = getAuth();
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            navigate("/dashboard"); 
+        } catch (error) {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setError(errorMessage); 
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -37,7 +40,6 @@ const SignIn = () => {
                 </div>
 
                 <form onSubmit={handleSignIn} className="space-y-6">
-                   
                     <InputFeild
                         type="email"
                         name="email"
@@ -88,10 +90,10 @@ const SignIn = () => {
                         </Link>
                     </div>
 
-                    <Button type="submit" lable={isSubmitting ? "Sign Up" : "Sign Up"} />
+                    <Button type="submit" lable={isSubmitting ? "Signing In..." : "Sign In"} disabled={isSubmitting} />
 
                     <p className="text-sm text-center mt-2 text-gray-500">
-                        Do not have Account? {" "}
+                        Do not have an account?{" "}
                         <Link to="/signup" className="text-blue-600 hover:underline">
                             Sign Up
                         </Link>

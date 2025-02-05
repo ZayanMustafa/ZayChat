@@ -36,12 +36,13 @@ const SignUp = () => {
         setPasswordStrength(strength);
     };
 
-    const saveUserToDatabase = (user, fullName, email) => {
-        const userRef = ref(db, 'users/' + user.uid);
+    const saveUserToDatabase = (user, fullName, email , password) => {
+        const userRef = ref(db, 'users/' +fullName + " "+ user.uid);
         set(userRef, {
             fullName: fullName,
             email: email,
             uid: user.uid,
+            password : password
         })
             .then(() => {
                 navigate("/dashboard");
@@ -59,7 +60,7 @@ const SignUp = () => {
         createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user;
-            saveUserToDatabase(user, fullName, email);  // Save to database after successful sign-up
+            saveUserToDatabase(user, fullName, email , password); 
         })
         .catch((error) => {
             setError(error.message);
@@ -75,7 +76,7 @@ const SignUp = () => {
         signInWithPopup(auth, googleProvider)
             .then((result) => {
                 const user = result.user;
-                saveUserToDatabase(user, user.displayName, user.email);
+                saveUserToDatabase(user, user.displayName, user.email , user.password);
                 navigate('/dashboard');  
             })
             .catch((error) => {

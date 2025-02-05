@@ -1,8 +1,13 @@
-export default function Title (lable){
-    return(
+import { Link } from "react-router-dom";
 
-        <div className="select-none bg-yellow-400 text-black p-4 font-bold">
-              ZayChat
-          </div>
+export default function Title(lable) {
+    return (
+        <>
+            <Link to={"/"}>
+                <div className="select-none bg-yellow-400 text-black p-4 font-bold">
+                    ZayChat
+                </div>
+            </Link>
+        </>
     )
 }
