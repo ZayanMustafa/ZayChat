@@ -41,8 +41,12 @@ const ChatApp = () => {
           <Title />
 
           {/* Search */}
-          <SearchComponent messages={MESSAGES} />
+          <SearchComponent messages={MESSAGES} users={USERS} onSelectUser={handleSelectUser} />
 
+
+
+
+          
           {/* User List */}
           <UserList users={USERS} onSelectUser={handleSelectUser} />
           {selectedUserId && <p>Selected User ID: {selectedUserId}</p>}

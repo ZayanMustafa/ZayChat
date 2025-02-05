@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SearchComponent = ({ messages }) => {
+const SearchComponent = ({ messages , onSelectUser }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedName, setSelectedName] = useState(null);
 
@@ -9,7 +9,10 @@ const SearchComponent = ({ messages }) => {
   };
 
   const handleNameClick = (name) => {
-    setSelectedName(name);
+    const user = users.find((user) => user.name === name);
+    if (user) {
+      onSelectUser(user.id); // Navigate to chat when clicking on a searched user
+    }
   };
 
   const uniqueNames = Object.values(messages)
@@ -53,17 +56,7 @@ const SearchComponent = ({ messages }) => {
           ))
         )}
       </div>
-      {/* For Showing the messages in the search area */}
-      {/* {selectedMessages && selectedMessages.length > 0 && (
-        <div className="mt-4">
-          <h3>Messages from {selectedName}:</h3>
-          {selectedMessages.map((message, index) => (
-            <div key={index} className="mb-2">
-              <strong>{message.from}:</strong> {message.text}
-            </div>
-          ))}
-        </div>
-      )} */}
+      
     </div>
   );
 };
