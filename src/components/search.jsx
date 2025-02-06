@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {   getAuth , getFirestore, collection, getDocs } from "../firebase/initializetion"; 
-const SearchComponent = ({ messages, onSelectUser }) => {
+import { getAuth, getFirestore, collection, getDocs } from "../firebase/initializetion";
+
+const SearchComponent = ({ onSelectUser }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -13,7 +14,10 @@ const SearchComponent = ({ messages, onSelectUser }) => {
     const fetchUsers = async () => {
       const usersCollection = collection(db, "users"); // Assuming your users are stored in the "users" collection
       const userSnapshot = await getDocs(usersCollection);
-      const userList = userSnapshot.docs.map((doc) => doc.data());
+      const userList = userSnapshot.docs.map((doc) => ({
+        id: doc.id, // Add doc.id to the user data
+        ...doc.data(), // Spread the data from Firestore document
+      }));
       setUsers(userList);
     };
 
@@ -52,9 +56,9 @@ const SearchComponent = ({ messages, onSelectUser }) => {
         {searchTerm && filteredUsers.length === 0 ? (
           <p className="text-gray-500">No users found</p>
         ) : (
-          filteredUsers.map((user, index) => (
+          filteredUsers.map((user) => (
             <div
-              key={index}
+              key={user.id}
               onClick={() => handleNameClick(user.id)}
               className="cursor-pointer ms-4 mb-2 text-black-500 hover:underline"
             >

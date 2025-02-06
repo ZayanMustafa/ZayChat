@@ -1,31 +1,47 @@
-import React from 'react';
-import { useState , useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const Loader = () => {
+    const [loadingText, setLoadingText] = useState(true);
+    const [textVisible, setTextVisible] = useState(true); // New state for hiding text
     const [loading, setLoading] = useState(true);
+
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setLoading(false);
-        }, 13000);
-        return () => clearTimeout(timer);
+        const firstTimer = setTimeout(() => {
+            setLoadingText('Loading coming...');
+            setTextVisible(false); // Hide the text after 4 seconds
+        }, 4000);
+
+        const secondTimer = setTimeout(() => {
+            setLoading(false); // Hide loader after 8 seconds
+        }, 8000);
+
+        return () => {
+            clearTimeout(firstTimer);
+            clearTimeout(secondTimer);
+        };
     }, []);
+
     if (!loading) {
         return null;
     }
 
     return (
-    <StyledWrapper>
-      <div className="loading">
-        <span />
-        <span />
-        <span />
-        <span />
-        <span />
-      </div>
-    </StyledWrapper>
-  );
-}
+        <StyledWrapper>
+            {textVisible && (
+                <div className="loading-text">Internet to ata rahy ga<br/>tum bhee atay rehna! 👀</div>
+            )}
+            <div className="loading-comming">Chalow a gaya internet<br/> 😊 </div>
+            <div className="loading">
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+            </div>
+        </StyledWrapper>
+    );
+};
 
 const StyledWrapper = styled.div`
   background-color: lightgray; 
@@ -37,6 +53,34 @@ const StyledWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  font-family: 'Arial', sans-serif;
+
+  .loading-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+    animation: fadeIn 1s ease-out;
+
+    /* Add shadow for a cool effect */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  }
+
+  .loading-comming {
+    font-size: 20px;
+    font-weight: 600;
+    color: #4CAF50;
+    text-align: center;
+    margin-bottom: 30px;
+    opacity: 0;
+    animation: fadeInUp 1.5s ease-out 5s forwards;
+
+    /* Add some visual flair */
+    font-style: italic;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  }
 
   .loading {
     --speed-of-animation: 0.9s;
@@ -90,7 +134,27 @@ const StyledWrapper = styled.div`
       transform: scaleY(1);
     }
   }
-`;
 
+  /* Text fade-in effects */
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
 
 export default Loader;
