@@ -1,7 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider,signOut, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
+import { getAuth, GoogleAuthProvider, signOut, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { getDatabase, ref, set, onValue } from "firebase/database";
+import { getFirestore, collection, getDocs } from "firebase/firestore";  // <-- Import Firestore functions
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -12,16 +13,32 @@ const firebaseConfig = {
   messagingSenderId: "357803733196",
   appId: "1:357803733196:web:6858719c90e0adee6c1269",
   measurementId: "G-M98CL9L9PG",
-  databaseURL: "https://chatappbyzayyan-default-rtdb.asia-southeast1.firebasedatabase.app/" 
+  databaseURL: "https://chatappbyzayyan-default-rtdb.asia-southeast1.firebasedatabase.app/"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider(); 
-
+const googleProvider = new GoogleAuthProvider();
 const db = getDatabase(app);
+const firestore = getFirestore(app);  
 
-// Export the necessary objects for use in other files
-export { auth, getAuth, googleProvider, signOut,createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, db, ref, set };
+export { 
+  getAuth,
+  auth, 
+  googleProvider, 
+  signOut,
+  createUserWithEmailAndPassword, 
+  onAuthStateChanged, 
+  signInWithEmailAndPassword, 
+  signInWithPopup, 
+  db, 
+  ref, 
+  set, 
+  onValue,
+  firestore, 
+  getFirestore, 
+  collection, 
+  getDocs  
+};

@@ -1,4 +1,4 @@
-import Loader from "../components/loader";
+import Loader from "../components/Loader";
 import SignUp from "../components/signup";
 import { useState, useEffect } from "react";
 import ChatApp from "./user";

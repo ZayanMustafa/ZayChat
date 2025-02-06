@@ -1,25 +1,43 @@
-import React, { useState } from "react";
-
-const SearchComponent = ({ messages, users, onSelectUser }) => {
+import React, { useState, useEffect } from "react";
+import {   getAuth , getFirestore, collection, getDocs } from "../firebase/initializetion"; 
+const SearchComponent = ({ messages, onSelectUser }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
+  const auth = getAuth();
+  const db = getFirestore();
+
+  // Fetch users from Firebase Firestore
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const usersCollection = collection(db, "users"); // Assuming your users are stored in the "users" collection
+      const userSnapshot = await getDocs(usersCollection);
+      const userList = userSnapshot.docs.map((doc) => doc.data());
+      setUsers(userList);
+    };
+
+    fetchUsers();
+  }, [db]);
+
+  // Handle search term change
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const handleNameClick = (name) => {
-    const user = users.find((user) => user.name === name);
-    if (user) {
-      onSelectUser(user.id);
-      setSearchTerm(""); // Clear the search input
-    }
-  };
+  // Filter users based on search term
+  useEffect(() => {
+    const filtered = users.filter((user) =>
+      user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredUsers(filtered);
+  }, [searchTerm, users]);
 
-  const filteredNames = Object.values(messages)
-    .flat()
-    .map((message) => message.from)
-    .filter((value, index, self) => self.indexOf(value) === index)
-    .filter((name) => name.toLowerCase().includes(searchTerm.toLowerCase()));
+  // Handle user click
+  const handleNameClick = (id) => {
+    onSelectUser(id); // Show the chat for the selected user
+    setSearchTerm(""); // Clear the search input
+  };
 
   return (
     <div className="p-4">
@@ -31,17 +49,16 @@ const SearchComponent = ({ messages, users, onSelectUser }) => {
         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none"
       />
       <div className="mt-4">
-        {searchTerm && filteredNames.length === 0 ? (
-          <p className="text-gray-500">No names found</p>
+        {searchTerm && filteredUsers.length === 0 ? (
+          <p className="text-gray-500">No users found</p>
         ) : (
-          searchTerm &&
-          filteredNames.map((name, index) => (
+          filteredUsers.map((user, index) => (
             <div
               key={index}
-              onClick={() => handleNameClick(name)}
+              onClick={() => handleNameClick(user.id)}
               className="cursor-pointer ms-4 mb-2 text-black-500 hover:underline"
             >
-              {name}
+              {user.name}
             </div>
           ))
         )}
