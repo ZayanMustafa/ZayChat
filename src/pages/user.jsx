@@ -38,7 +38,7 @@ const ChatApp = () => {
     }
   });
 
-  return () => unsubscribe(); // Cleanup on unmount
+  return () => unsubscribe(); 
 }, []);
 
   useEffect(() => {
