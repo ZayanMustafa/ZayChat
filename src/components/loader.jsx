@@ -9,12 +9,12 @@ const Loader = () => {
     useEffect(() => {
         const firstTimer = setTimeout(() => {
             setLoadingText('Loading coming...');
-            setTextVisible(false); 
+            setTextVisible(false); // Hide the text after 4 seconds
         }, 4000);
 
         const secondTimer = setTimeout(() => {
-            setLoading(false); 
-        }, 3000);
+            setLoading(false); // Hide loader after 8 seconds
+        }, 8000);
 
         return () => {
             clearTimeout(firstTimer);
@@ -75,7 +75,7 @@ const StyledWrapper = styled.div`
     text-align: center;
     margin-bottom: 30px;
     opacity: 0;
-    animation: fadeInUp 1.5s ease-out 2s forwards;
+    animation: fadeInUp 1.5s ease-out 5s forwards;
 
     /* Add some visual flair */
     font-style: italic;
@@ -135,6 +135,7 @@ const StyledWrapper = styled.div`
     }
   }
 
+  /* Text fade-in effects */
   @keyframes fadeIn {
     0% {
       opacity: 0;

@@ -1,45 +1,20 @@
-import React, { useState } from 'react';
-import { IoMdSend } from "react-icons/io";
-import { FaCamera } from "react-icons/fa";
+import { db, ref, push, set, serverTimestamp } from "../firebase/initializetion";
 
-export function MessageInput({ onSendMessage }) {
-  const [message, setMessage] = useState('');
+const HandleSubmit = (message, senderId, receiverId) => {
+  if (!message.trim()) return;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (message.trim()) {
-      onSendMessage({ type: 'text', content: message });
-      setMessage('');
-    }
-  };
+  // Create unique chat room ID based on both UIDs (sorted to avoid duplicates)
+  const chatRoomId = senderId < receiverId ? `${senderId}_${receiverId}` : `${receiverId}_${senderId}`;
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        onSendMessage({ type: 'image', content: reader.result });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  // Reference to the chat messages
+  const messagesRef = ref(db, `chats/${chatRoomId}/messages`);
 
-  return (
-    <form onSubmit={handleSubmit} className="p-4 border-t bg-gray-200 flex items-center">
-      <input
-        type="text"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        placeholder="Type your message..."
-        className="w-full p-2 rounded-lg border border-gray-300"
-      />
-      <label className="ml-2 p-2 rounded-full bg-yellow-300 text-white hover:bg-yellow-400 cursor-pointer">
-        <FaCamera size={24} />
-        <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
-      </label>
-      <button type="submit" className="ml-2 p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
-        <IoMdSend size={24} />
-      </button>
-    </form>
-  );
-}
+  // Push new message to the chat
+  const newMessageRef = push(messagesRef);
+  set(newMessageRef, {
+    sender: senderId,
+    receiver: receiverId,
+    text: message,
+    timestamp: serverTimestamp(),
+  });
+};

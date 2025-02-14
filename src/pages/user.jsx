@@ -102,8 +102,8 @@ const ChatApp = () => {
 
           {selectedUserId ? (
             <>
-              <ChatMessages messages={selectedMessages[selectedUserId] || []} />
-              <MessageInput onSendMessage={HandleSubmit} />
+              <ChatMessages senderId={currentUserId} receiverId={selectedUserId} />
+              <MessageInput onSendMessage={(msg) => HandleSubmit(msg.content, currentUserId, selectedUserId)} />
             </>
           ) : (
             <NoUserSelected />
