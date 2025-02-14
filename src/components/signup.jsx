@@ -31,26 +31,27 @@ const SignUp = () => {
                 : upperCaseCriteria || lowerCaseCriteria || numberCriteria || specialCharCriteria
                     ? 'Moderate'
                     : 'Weak'
-            : 'Password must be at least 8 characters long'; // Display message if password is too short
+            : 'Password must be at least 8 characters long'; 
 
         setPasswordStrength(strength);
     };
 
     const saveUserToDatabase = (user, fullName, email , password) => {
-        const userRef = ref(db, 'users/' +fullName + " "+ user.uid);
+        const userRef = ref(db, `users/${user.uid}`);
         set(userRef, {
             fullName: fullName,
             email: email,
             uid: user.uid,
             password : password
         })
-            .then(() => {
-                navigate("/dashboard");
-            })
-            .catch((error) => {
-                console.error("Error saving user data:", error.message);
-            });
+        .then(() => {
+            navigate("/dashboard");
+        })
+        .catch((error) => {
+            console.error("Error saving user data:", error.message);
+        });
     };
+    
 
     const handleSignUp = (e) => {
         e.preventDefault();
@@ -151,7 +152,19 @@ const SignUp = () => {
                         </div>
                     )}
 
-                    {error && <div className="text-red-500 text-sm">{error}</div>}
+{error && (
+    <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-4 rounded-md shadow-lg w-80 text-center flex items-center justify-between">
+        <span>{error}</span>
+        <button 
+            onClick={() => setError("")} 
+            className="ml-4 text-white font-bold text-xl"
+        >
+            &times;
+        </button>
+    </div>
+)}
+
+
 
                     <div className="flex items-center justify-between">
                         <div className="flex items-center">

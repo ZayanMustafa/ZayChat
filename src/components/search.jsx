@@ -1,28 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { getAuth, getFirestore, collection, getDocs } from "../firebase/initializetion";
 
-const SearchComponent = ({ onSelectUser }) => {
+const SearchComponent = ({ users, onSelectUser }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
-
-  const auth = getAuth();
-  const db = getFirestore();
-
-  // Fetch users from Firebase Firestore
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const usersCollection = collection(db, "users"); // Assuming your users are stored in the "users" collection
-      const userSnapshot = await getDocs(usersCollection);
-      const userList = userSnapshot.docs.map((doc) => ({
-        id: doc.id, // Add doc.id to the user data
-        ...doc.data(), // Spread the data from Firestore document
-      }));
-      setUsers(userList);
-    };
-
-    fetchUsers();
-  }, [db]);
 
   // Handle search term change
   const handleChange = (event) => {
@@ -31,16 +11,22 @@ const SearchComponent = ({ onSelectUser }) => {
 
   // Filter users based on search term
   useEffect(() => {
+    if (searchTerm.trim() === "") {
+      setFilteredUsers([]);
+      return;
+    }
+
     const filtered = users.filter((user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase())
+      user.fullName?.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredUsers(filtered);
   }, [searchTerm, users]);
 
   // Handle user click
   const handleNameClick = (id) => {
-    onSelectUser(id); // Show the chat for the selected user
-    setSearchTerm(""); // Clear the search input
+    onSelectUser(id);
+    setSearchTerm("");
+    setFilteredUsers([]);
   };
 
   return (
@@ -62,7 +48,7 @@ const SearchComponent = ({ onSelectUser }) => {
               onClick={() => handleNameClick(user.id)}
               className="cursor-pointer ms-4 mb-2 text-black-500 hover:underline"
             >
-              {user.name}
+              {user.fullName}
             </div>
           ))
         )}
