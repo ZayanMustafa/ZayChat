@@ -1,45 +1,45 @@
 import React, { useState, useEffect } from "react";
-import { onAuthStateChanged, getAuth, db , ref, get } from "../firebase/initializetion"; 
+import { onAuthStateChanged, getAuth } from "firebase/auth";
+import { db, ref, get } from "../firebase/initializetion"; 
 import UserList from "../components/userlist";
 import ChatMessages from "../components/chatmassage";
 import Title from "../components/title";
 import NoUserSelected from "../components/nouser";
 import Loader from "../components/Loader";
-import { MessageInput } from "../components/massageInput";
+import MessageInput from "../components/massageInput";
 import SearchComponent from "../components/search";
 
 const ChatApp = () => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [loggedInUserName, setLoggedInUserName] = useState("");
+  const [currentUserId, setCurrentUserId] = useState(null);  // ✅ Store the logged-in user ID
   const [loading, setLoading] = useState(true);
-  const [initialLoad, setInitialLoad] = useState(true);
   const [users, setUsers] = useState([]);
   const auth = getAuth();
 
   useEffect(() => {
-  const unsubscribe = onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const userRef = ref(db, `users/${user.uid}`);
-      get(userRef)
-        .then((snapshot) => {
-          if (snapshot.exists()) {
-            setLoggedInUserName(snapshot.val().fullName || "Unknown User hey Boss");
-          } else {
-            console.log("No user data available");
-            setLoggedInUserName("Unknown User");
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching user data:", error);
-        });
-    } else {
-      console.log("No user is logged in");
-      setLoggedInUserName("Guest");
-    }
-  });
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUserId(user.uid);  // ✅ Store user UID in state
+        const userRef = ref(db, `users/${user.uid}`);
+        get(userRef)
+          .then((snapshot) => {
+            if (snapshot.exists()) {
+              setLoggedInUserName(snapshot.val().fullName || "Unknown User");
+            } else {
+              setLoggedInUserName("Unknown User");
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching user data:", error);
+          });
+      } else {
+        setLoggedInUserName("Guest");
+      }
+    });
 
-  return () => unsubscribe(); 
-}, []);
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const usersRef = ref(db, "users");
@@ -53,7 +53,6 @@ const ChatApp = () => {
           }));
           setUsers(usersArray);
         } else {
-          console.log("No users found");
           setUsers([]);
         }
       })
@@ -68,11 +67,9 @@ const ChatApp = () => {
     setSelectedUserId(null);
   };
 
-  const HandleSubmit = () => {
-    alert("Message Sent");
+  const HandleSubmit = (message) => {
+    alert(`Message Sent: ${message}`);
   };
-
-  const selectedMessages = {}; 
 
   return (
     <div className="h-screen flex flex-col">
@@ -80,7 +77,7 @@ const ChatApp = () => {
         {/* Sidebar (Users List) */}
         <div className={`bg-gray-200 w-full sm:w-1/3 md:w-1/4 sm:block ${selectedUserId ? "hidden sm:block" : "block"}`}>
           <Title />
-          <SearchComponent messages={selectedMessages} users={users} onSelectUser={handleSelectUser} />
+          <SearchComponent users={users} onSelectUser={handleSelectUser} />
           {users.length > 0 ? (
             <UserList users={users} onSelectUser={handleSelectUser} />
           ) : (
@@ -92,18 +89,22 @@ const ChatApp = () => {
         <div className={`flex-1 flex flex-col bg-gray-100 ${selectedUserId ? "block" : "hidden sm:block"}`}>
           <div className="flex items-center justify-between bg-yellow-400 p-4 text-black">
             <div className="cursor-pointer font-bold" onClick={handleBackToUsers}>
-              {initialLoad ? (
-                <div className="w-32 h-6 bg-yellow-300 animate-pulse rounded" />
-              ) : (
-                selectedUserId ? users.find((user) => user.id === selectedUserId)?.fullName : loggedInUserName
-              )}
+              {selectedUserId ? users.find((user) => user.id === selectedUserId)?.fullName : loggedInUserName}
             </div>
           </div>
 
           {selectedUserId ? (
             <>
               <ChatMessages senderId={currentUserId} receiverId={selectedUserId} />
-              <MessageInput onSendMessage={(msg) => HandleSubmit(msg.content, currentUserId, selectedUserId)} />
+              <MessageInput 
+  onSendMessage={HandleSubmit} 
+  senderId={currentUserId} 
+  receiverId={selectedUserId} 
+/>
+
+              {/* <MessageInput onSendMessage={(msg) => HandleSubmit(msg?.trim(), currentUserId, selectedUserId)} /> */}
+
+              {/* <MessageInput onSendMessage={(msg) => HandleSubmit(msg.content, currentUserId, selectedUserId)} /> */}
             </>
           ) : (
             <NoUserSelected />
