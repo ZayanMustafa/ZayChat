@@ -88,7 +88,7 @@ const ChatApp = () => {
     push(messagesRef, newMessage)
       .then(() => {
         // Optionally, handle any post-send logic, e.g., clearing input field
-        alert(`Message Sent: ${message}`);
+
       })
       .catch((error) => {
         console.error("Error sending message:", error);

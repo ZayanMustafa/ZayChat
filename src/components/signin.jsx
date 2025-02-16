@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import InputFeild from "./inputfeild";
 import Button from "./button";
@@ -11,22 +11,40 @@ const SignIn = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const navigate = useNavigate(); 
-   
-    
+    const [rememberMe, setRememberMe] = useState(false); // State for "Remember Me"
+    const navigate = useNavigate();
+
+    // Check localStorage for saved credentials on component mount
+    useEffect(() => {
+        const savedEmail = localStorage.getItem("rememberMeEmail");
+        if (savedEmail) {
+            setEmail(savedEmail);
+            setRememberMe(true); // Auto-check the "Remember Me" checkbox
+        }
+    }, []);
+
     const handleSignIn = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        setError(""); 
+        setError("");
+
         const auth = getAuth();
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            navigate("/dashboard"); 
+
+            // Save email to localStorage if "Remember Me" is checked
+            if (rememberMe) {
+                localStorage.setItem("rememberMeEmail", email);
+            } else {
+                localStorage.removeItem("rememberMeEmail"); // Clear saved email if unchecked
+            }
+
+            navigate("/dashboard");
         } catch (error) {
             const errorCode = error.code;
             const errorMessage = error.message;
-            setError(errorMessage); 
+            setError(errorMessage);
         } finally {
             setIsSubmitting(false);
         }
@@ -81,6 +99,8 @@ const SignIn = () => {
                                 id="remember"
                                 type="checkbox"
                                 className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                checked={rememberMe}
+                                onChange={(e) => setRememberMe(e.target.checked)}
                             />
                             <label htmlFor="remember" className="ml-2 text-sm text-gray-900">
                                 Remember me

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { db, ref, push, set, serverTimestamp } from "../firebase/initializetion";
+// import { db, ref, push, set, serverTimestamp } from "../firebase/initializetion";
 
 const MessageInput = ({ onSendMessage, senderId, receiverId }) => {
   const [message, setMessage] = useState("");
