@@ -102,9 +102,6 @@ const ChatApp = () => {
   receiverId={selectedUserId} 
 />
 
-              {/* <MessageInput onSendMessage={(msg) => HandleSubmit(msg?.trim(), currentUserId, selectedUserId)} /> */}
-
-              {/* <MessageInput onSendMessage={(msg) => HandleSubmit(msg.content, currentUserId, selectedUserId)} /> */}
             </>
           ) : (
             <NoUserSelected />
@@ -115,6 +112,7 @@ const ChatApp = () => {
       {loading && <Loader />}
     </div>
   );
-};
+}; 
+
 
 export default ChatApp;

@@ -58,7 +58,7 @@ const UserList = ({ onSelectUser }) => {
             className="flex items-center p-4 mb-4 border-b border-gray-300 cursor-pointer hover:bg-gray-200"
             onClick={() => onSelectUser(user.id)}
           >
-            {/* Avatar with first letter of name */}
+
             <div className="w-10 h-10 flex items-center justify-center bg-yellow-500 text-black rounded-full mr-4">
               {user.name.charAt(0).toUpperCase()}
             </div>
