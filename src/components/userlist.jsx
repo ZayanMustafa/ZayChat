@@ -30,8 +30,7 @@ const UserList = ({ onSelectUser }) => {
           .filter((key) => key !== currentUser) 
           .map((key) => ({
             id: key,
-            name: userData[key].fullName || "No Name",
-            email: userData[key].email || "No Email",
+            name: userData[key].fullName || "No Name",  
           }))
           .sort((a, b) => a.name.localeCompare(b.name)); 
         setUsers(userList);
