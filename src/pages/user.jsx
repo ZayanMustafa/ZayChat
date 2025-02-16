@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { onAuthStateChanged, getAuth } from "firebase/auth";
-import { db, ref, get } from "../firebase/initializetion"; 
+// import { } from "firebase/auth";
+import { db, ref, get , push,serverTimestamp , onAuthStateChanged, getAuth } from "../firebase/initializetion";
 import UserList from "../components/userlist";
 import ChatMessages from "../components/chatmassage";
 import Title from "../components/title";
@@ -12,7 +12,7 @@ import SearchComponent from "../components/search";
 const ChatApp = () => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [loggedInUserName, setLoggedInUserName] = useState("");
-  const [currentUserId, setCurrentUserId] = useState(null);  // ✅ Store the logged-in user ID
+  const [currentUserId, setCurrentUserId] = useState(null);  
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const auth = getAuth();
@@ -20,7 +20,7 @@ const ChatApp = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setCurrentUserId(user.uid);  // ✅ Store user UID in state
+        setCurrentUserId(user.uid);  
         const userRef = ref(db, `users/${user.uid}`);
         get(userRef)
           .then((snapshot) => {
@@ -67,13 +67,40 @@ const ChatApp = () => {
     setSelectedUserId(null);
   };
 
+  
+  
   const HandleSubmit = (message) => {
-    alert(`Message Sent: ${message}`);
+    if (!message.trim()) return; // Avoid sending empty messages
+
+    const chatRoomId = currentUserId < selectedUserId ? `${currentUserId}_${selectedUserId}` : `${selectedUserId}_${currentUserId}`;
+    
+    // Create a reference for the new message
+    const messagesRef = ref(db, `chats/${chatRoomId}/messages`);
+    
+    // Create a new message object
+    const newMessage = {
+      sender: currentUserId,
+      text: message,
+      timestamp: serverTimestamp(),
+    };
+  
+    // Push the new message to Firebase
+    push(messagesRef, newMessage)
+      .then(() => {
+        // Optionally, handle any post-send logic, e.g., clearing input field
+        alert(`Message Sent: ${message}`);
+      })
+      .catch((error) => {
+        console.error("Error sending message:", error);
+      });
   };
+
+
 
   return (
     <div className="h-screen flex flex-col">
       <div className="flex-1 flex overflow-hidden">
+        
         {/* Sidebar (Users List) */}
         <div className={`bg-gray-200 w-full sm:w-1/3 md:w-1/4 sm:block ${selectedUserId ? "hidden sm:block" : "block"}`}>
           <Title />
@@ -81,7 +108,7 @@ const ChatApp = () => {
           {users.length > 0 ? (
             <UserList users={users} onSelectUser={handleSelectUser} />
           ) : (
-            <p className="text-center text-gray-500">No users available</p>
+            <p className="text-center font-(--my-font) text-gray-700">No users available</p>
           )}
         </div>
 
@@ -96,11 +123,11 @@ const ChatApp = () => {
           {selectedUserId ? (
             <>
               <ChatMessages senderId={currentUserId} receiverId={selectedUserId} />
-              <MessageInput 
-  onSendMessage={HandleSubmit} 
-  senderId={currentUserId} 
-  receiverId={selectedUserId} 
-/>
+              <MessageInput
+                onSendMessage={HandleSubmit}
+                senderId={currentUserId}
+                receiverId={selectedUserId}
+              />
 
             </>
           ) : (
@@ -112,7 +139,7 @@ const ChatApp = () => {
       {loading && <Loader />}
     </div>
   );
-}; 
+};
 
 
 export default ChatApp;
