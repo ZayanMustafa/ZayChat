@@ -9,7 +9,6 @@ export default function Title() {
           ZayChat
         </div>
 
-        {/* Position Setting component next to the title */}
         <Setting />
       </Link>
     </>

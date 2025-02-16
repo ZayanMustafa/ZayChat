@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import { db, ref, push, set, serverTimestamp } from "../firebase/initializetion";
+import { FaPaperPlane } from "react-icons/fa";  // Importing the paper plane icon
 
 const MessageInput = ({ onSendMessage, senderId, receiverId }) => {
   const [message, setMessage] = useState("");
@@ -17,7 +17,7 @@ const MessageInput = ({ onSendMessage, senderId, receiverId }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 flex">
+    <form onSubmit={handleSubmit} className="p-4 flex items-center space-x-2">
       <input
         type="text"
         value={message}
@@ -25,8 +25,9 @@ const MessageInput = ({ onSendMessage, senderId, receiverId }) => {
         placeholder="Type a message..."
         className="flex-1 p-2 border rounded-lg focus:outline-none"
       />
-      <button type="submit" className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg">
-        Send
+      {/* Send Button with yellow color */}
+      <button type="submit" className="bg-yellow-500 text-white p-2 rounded-lg">
+        <FaPaperPlane size={20} className="text-white" />
       </button>
     </form>
   );

@@ -1,24 +1,27 @@
-import { useEffect, useState } from "react"; 
-import { db, ref, onValue } from "../firebase/initializetion";
+import { useEffect, useState } from "react";
+import { db, ref, onValue, push } from "../firebase/initializetion";
+import { FaCommentAlt } from "react-icons/fa"; // Importing conversation icon
 
 const ChatMessages = ({ senderId, receiverId }) => {
   const [messages, setMessages] = useState([]);
-  const [receiverName, setReceiverName] = useState("");  // State for receiver's name
+  const [senderName, setSenderName] = useState("");  // Use state to track sender name
+  const [messageText, setMessageText] = useState("");
 
   useEffect(() => {
     if (!senderId || !receiverId) return;
 
-    // Fetch receiver's name from Firebase
-    const receiverRef = ref(db, `users/${receiverId}`);
-    onValue(receiverRef, (snapshot) => {
+    // Fetching sender's name from the database using senderId
+    const senderRef = ref(db, `users/${senderId}`);
+    onValue(senderRef, (snapshot) => {
       if (snapshot.exists()) {
-        setReceiverName(snapshot.val().fullName || "Unknown User");
+        setSenderName(snapshot.val().fullName || "You"); // Set sender name (default "You")
       } else {
-        setReceiverName("Unknown User");
+        setSenderName("You");
       }
     });
 
-    const chatRoomId = senderId < receiverId ? `${senderId}_${receiverId}` : `${receiverId}_${senderId}`;
+    const chatRoomId =
+      senderId < receiverId ? `${senderId}_${receiverId}` : `${receiverId}_${senderId}`;
     const messagesRef = ref(db, `chats/${chatRoomId}/messages`);
 
     const unsubscribe = onValue(messagesRef, (snapshot) => {
@@ -33,17 +36,53 @@ const ChatMessages = ({ senderId, receiverId }) => {
     return () => unsubscribe();
   }, [senderId, receiverId]);
 
+  const sendMessage = () => {
+    if (messageText.trim()) {
+      const chatRoomId =
+        senderId < receiverId ? `${senderId}_${receiverId}` : `${receiverId}_${senderId}`;
+      const messagesRef = ref(db, `chats/${chatRoomId}/messages`);
+
+      const messageData = {
+        sender: senderId,
+        senderName: senderName,  // Use sender's name here
+        text: messageText,
+        timestamp: Date.now(),
+      };
+
+      push(messagesRef, messageData)
+        .then(() => setMessageText(""))
+        .catch((error) => console.error("Error sending message:", error));
+    }
+  };
+
   return (
     <div className="flex-1 p-4 overflow-y-auto">
-      {messages.map((msg, index) => (
-        <div key={index} className={`mb-2 flex ${msg.sender === senderId ? "justify-end" : "justify-start"}`}>
-         <div
-            className={`p-2 max-w-xs rounded-lg ${msg.sender === senderId ? "bg-gray-200 text-white" : "bg-yellow-200"}`}
-          >
-            <p className="text-gray-700">{msg.text}</p>
-          </div>
+      {messages.length === 0 ? (
+        <div className="flex flex-col justify-center items-center h-full text-xl text-gray-700">
+          <FaCommentAlt className="mb-2 text-yellow-500" size={250} />
+          {/* Display sender's name dynamically with exclamation mark, and make it bold */}
+          <p>
+            <strong className="text-gray-800" >{senderName}</strong>!
+            Sometimes the best connections start with a simple 'hi.' <br />
+            Ready to make one, 
+          </p>
         </div>
-      ))}
+      ) : (
+        messages.map((msg, index) => (
+          <div
+            key={index}
+            className={`mb-2 flex ${msg.sender === senderId ? "justify-end" : "justify-start"}`}
+          >
+            <div
+              className={`p-2 max-w-xs rounded-lg ${
+                msg.sender === senderId ? "bg-gray-200 text-white" : "bg-yellow-200"
+              }`}
+            >
+              <p className="text-gray-700">{msg.text}</p>
+            </div>
+          </div>
+        ))
+      )}
     </div>
   );
 };
