@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"; 
 import { db, ref, onValue } from "../firebase/initializetion";
 
 const ChatMessages = ({ senderId, receiverId }) => {
@@ -36,9 +36,12 @@ const ChatMessages = ({ senderId, receiverId }) => {
   return (
     <div className="flex-1 p-4 overflow-y-auto">
       {messages.map((msg, index) => (
-        <div key={index} className="mb-2">
-          <p className="font-semibold">{msg.sender === senderId ? "You" : receiverName}</p> {/* Use receiverName here */}
-          <p className="text-gray-700">{msg.text}</p>
+        <div key={index} className={`mb-2 flex ${msg.sender === senderId ? "justify-end" : "justify-start"}`}>
+         <div
+            className={`p-2 max-w-xs rounded-lg ${msg.sender === senderId ? "bg-gray-200 text-white" : "bg-yellow-200"}`}
+          >
+            <p className="text-gray-700">{msg.text}</p>
+          </div>
         </div>
       ))}
     </div>
