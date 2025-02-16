@@ -8,7 +8,6 @@ export default function Title() {
         <div className="select-none bg-yellow-400 text-black p-4 font-bold">
           ZayChat
         </div>
-
         <Setting />
       </Link>
     </>

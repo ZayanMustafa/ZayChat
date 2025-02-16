@@ -14,7 +14,7 @@ const ChatMessages = ({ senderId, receiverId }) => {
     const senderRef = ref(db, `users/${senderId}`);
     onValue(senderRef, (snapshot) => {
       if (snapshot.exists()) {
-        setSenderName(snapshot.val().fullName || "You"); // Set sender name (default "You")
+        setSenderName(snapshot.val().fullName || "You"); 
       } else {
         setSenderName("You");
       }
@@ -44,7 +44,7 @@ const ChatMessages = ({ senderId, receiverId }) => {
 
       const messageData = {
         sender: senderId,
-        senderName: senderName,  // Use sender's name here
+        senderName: senderName,  
         text: messageText,
         timestamp: Date.now(),
       };
@@ -60,7 +60,7 @@ const ChatMessages = ({ senderId, receiverId }) => {
       {messages.length === 0 ? (
         <div className="flex flex-col justify-center items-center h-full text-xl text-gray-700">
           <FaCommentAlt className="mb-2 text-yellow-500" size={250} />
-          {/* Display sender's name dynamically with exclamation mark, and make it bold */}
+
           <p>
             <strong className="text-gray-800" >{senderName}</strong>!
             Sometimes the best connections start with a simple 'hi.' <br />

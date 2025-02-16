@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaPaperPlane } from "react-icons/fa";  // Importing the paper plane icon
+import { FaPaperPlane } from "react-icons/fa";  
 
 const MessageInput = ({ onSendMessage, senderId, receiverId }) => {
   const [message, setMessage] = useState("");
@@ -7,12 +7,10 @@ const MessageInput = ({ onSendMessage, senderId, receiverId }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    if (!message.trim()) return; // Prevent empty messages
+    if (!message.trim()) return; 
 
-    // Call the parent function to send the message
     onSendMessage(message.trim(), senderId, receiverId);
     
-    // Clear the input field after sending
     setMessage("");
   };
 
@@ -25,7 +23,7 @@ const MessageInput = ({ onSendMessage, senderId, receiverId }) => {
         placeholder="Type a message..."
         className="flex-1 p-2 border rounded-lg focus:outline-none"
       />
-      {/* Send Button with yellow color */}
+
       <button type="submit" className="bg-yellow-500 text-white p-2 rounded-lg">
         <FaPaperPlane size={20} className="text-white" />
       </button>
