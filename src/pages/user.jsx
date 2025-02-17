@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 // import { } from "firebase/auth";
-import { db, ref, get , push,serverTimestamp , onAuthStateChanged, getAuth } from "../firebase/initializetion";
+import { db, ref, get , push,serverTimestamp , onAuthStateChanged, getAuth } from "../firebase/initialization";
 import UserList from "../components/userlist";
 import ChatMessages from "../components/chatmassage";
 import Title from "../components/title";
 import NoUserSelected from "../components/nouser";
-import Loader from "../components/Loader";
+import Loader from "../components/loder";
 import MessageInput from "../components/massageInput";
 import SearchComponent from "../components/search";
 

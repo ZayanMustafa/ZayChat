@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { db, ref, onValue } from "../firebase/initializetion";
-import { auth } from "../firebase/initializetion"; 
-import Loader from "../components/Loader"; 
+import { db, ref, onValue } from "../firebase/initialization";
+import { auth } from "../firebase/initialization"; 
+import Loader from "./loder"; 
 
 const UserList = ({ onSelectUser }) => {
   const [users, setUsers] = useState([]);

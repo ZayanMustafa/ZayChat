@@ -3,7 +3,7 @@ import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import InputFeild from "./inputfeild";
 import Button from "./button";
 import { Link, useNavigate } from "react-router-dom";
-import { auth, googleProvider, createUserWithEmailAndPassword, signInWithPopup, db, ref, set } from "../firebase/initializetion"; // Fixed the import
+import { auth, googleProvider, createUserWithEmailAndPassword, signInWithPopup, db, ref, set } from "../firebase/initialization"; // Fixed the import
 
 const SignUp = () => {
     const [email, setEmail] = useState("");
