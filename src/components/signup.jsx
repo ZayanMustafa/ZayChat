@@ -74,18 +74,23 @@ const SignUp = () => {
     const handleGoogleSignUp = () => {
         setIsSubmitting(true);
 
-        signInWithPopup(auth, googleProvider)
-            .then((result) => {
-                const user = result.user;
-                saveUserToDatabase(user, user.displayName, user.email, user.password);
-                navigate('/dashboard');
-            })
-            .catch((error) => {
-                setError(error.message);
-            })
-            .finally(() => {
-                setIsSubmitting(false);
-            });
+        const handleGoogleSignUp = () => {
+            setIsSubmitting(true);
+        
+            signInWithPopup(auth, googleProvider)
+                .then((result) => {
+                    const user = result.user;
+                    saveUserToDatabase(user, user.displayName, user.email, ""); // Password hata diya
+                    navigate('/dashboard');
+                })
+                .catch((error) => {
+                    setError(error.message);
+                })
+                .finally(() => {
+                    setIsSubmitting(false);
+                });
+        };
+        
     };
 
     return (
@@ -181,19 +186,18 @@ const SignUp = () => {
                         disabled={isSubmitting}
                         lable={isSubmitting ? 'Signing Up...' : 'Sign Up'} />
 
-                    <div className="flex items-center my-4">
+                    {/* <div className="flex items-center my-4">
                         <div className="flex-grow border-t border-gray-300"></div>
-                        <span className="mx-4 text-gray-500">OR</span>
+                         <span className="mx-4 text-gray-500">OR</span>
                         <div className="flex-grow border-t border-gray-300"></div>
-                    </div>
+                    </div> */}
 
-                    <Button
-                        // disabled={isSubmitting}
+                    {/* <Button
                         type="button"
                         lable={'Sign Up with Google'}
                         onClick={handleGoogleSignUp}
                         icon={<FaGoogle size={20} />}
-                    />
+                    /> */}
 
                     <p className="text-sm text-center mt-2 text-gray-500">
                         Already have an Account?{" "}
