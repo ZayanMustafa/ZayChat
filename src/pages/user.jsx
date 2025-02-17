@@ -70,14 +70,13 @@ const ChatApp = () => {
   
   
   const HandleSubmit = (message) => {
-    if (!message.trim()) return; // Avoid sending empty messages
+    if (!message.trim()) return;  
 
     const chatRoomId = currentUserId < selectedUserId ? `${currentUserId}_${selectedUserId}` : `${selectedUserId}_${currentUserId}`;
     
-    // Create a reference for the new message
     const messagesRef = ref(db, `chats/${chatRoomId}/messages`);
+
     
-    // Create a new message object
     const newMessage = {
       sender: currentUserId,
       text: message,

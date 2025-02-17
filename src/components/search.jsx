@@ -44,10 +44,11 @@ const SearchComponent = ({ users, onSelectUser }) => {
         ) : (
           filteredUsers.map((user) => (
             <div
-              key={user.id}
-              onClick={() => handleNameClick(user.id)}
-              className="cursor-pointer ms-4 mb-2 text-black-500 hover:underline"
-            >
+            key={user.id}
+            onClick={() => handleNameClick(user.id)}
+            className="cursor-pointer ms-4 mb-2 text-black hover:text-yellow-500"
+          >
+          
               {user.fullName}
             </div>
           ))

@@ -24,7 +24,6 @@ const SignUp = () => {
         const numberCriteria = /\d/.test(password); // At least one number
         const specialCharCriteria = /[!@#$%^&*(),.?":{}|<>]/.test(password); // At least one special character
 
-        // Determine strength using ternary operators
         const strength = lengthCriteria
             ? upperCaseCriteria && lowerCaseCriteria && numberCriteria && specialCharCriteria
                 ? 'Strong'

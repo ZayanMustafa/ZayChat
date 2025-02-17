@@ -18,11 +18,11 @@ export function Setting() {
     const auth = getAuth();
     signOut(auth)
       .then(() => {
-        navigate("/"); // Navigate to the homepage after logging out
+        navigate("/"); 
       })
       .catch((error) => {
-        console.error("Error in Logout", error); // Log the error
-        // Optionally, you can show an error message to the user
+        console.error("Error in Logout", error); 
+
       });
   };
 
@@ -46,16 +46,16 @@ export function Setting() {
             className="py-2 text-sm text-gray-700"
             aria-labelledby="dropdownDefaultButton"
           >
-            <li>
+            {/* <li>
               <Link
                 className="block px-4 py-2 hover:bg-yellow-100"
                 to={"/updateprofile"}
               >
                 Update Profile
               </Link>
-            </li>
+            </li> */}
             <li>
-              {/* Button looks like Link */}
+
               <button
                 onClick={handleLogOut}
                 className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-yellow-100 focus:outline-none"

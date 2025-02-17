@@ -11,15 +11,15 @@ const SignIn = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [rememberMe, setRememberMe] = useState(false); // State for "Remember Me"
+    const [rememberMe, setRememberMe] = useState(false); 
     const navigate = useNavigate();
 
-    // Check localStorage for saved credentials on component mount
+
     useEffect(() => {
         const savedEmail = localStorage.getItem("rememberMeEmail");
         if (savedEmail) {
             setEmail(savedEmail);
-            setRememberMe(true); // Auto-check the "Remember Me" checkbox
+            setRememberMe(true);
         }
     }, []);
 
@@ -33,11 +33,10 @@ const SignIn = () => {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // Save email to localStorage if "Remember Me" is checked
             if (rememberMe) {
                 localStorage.setItem("rememberMeEmail", email);
             } else {
-                localStorage.removeItem("rememberMeEmail"); // Clear saved email if unchecked
+                localStorage.removeItem("rememberMeEmail"); 
             }
 
             navigate("/dashboard");

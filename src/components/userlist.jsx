@@ -56,11 +56,11 @@ const UserList = ({ onSelectUser }) => {
 
   }, [currentUser]);
 
-  // Sort users based on recent chat timestamps (latest first)
+
   const sortedUsers = [...users].sort((a, b) => {
     const timeA = recentChats[a.id] || 0;
     const timeB = recentChats[b.id] || 0;
-    return timeB - timeA; // Sort descending by timestamp
+    return timeB - timeA; 
   });
 
   return (

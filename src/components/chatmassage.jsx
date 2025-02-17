@@ -10,7 +10,6 @@ const ChatMessages = ({ senderId, receiverId }) => {
   useEffect(() => {
     if (!senderId || !receiverId) return;
 
-    // Fetching sender's name from the database using senderId
     const senderRef = ref(db, `users/${senderId}`);
     onValue(senderRef, (snapshot) => {
       if (snapshot.exists()) {

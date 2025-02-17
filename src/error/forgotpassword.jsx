@@ -3,8 +3,7 @@ import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { Link } from "react-router-dom";
 import InputFeild from "../components/inputfeild";
 import Button from "../components/button";
-// import InputFeild from "./inputfeild";
-// import Button from "./button";
+
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
