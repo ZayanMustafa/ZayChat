@@ -7,11 +7,12 @@ const UserList = ({ onSelectUser }) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
+  const [recentChats, setRecentChats] = useState({});
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        setCurrentUser(user.uid); 
+        setCurrentUser(user.uid);
       }
     });
 
@@ -19,8 +20,9 @@ const UserList = ({ onSelectUser }) => {
   }, []);
 
   useEffect(() => {
-    if (!currentUser) return; 
+    if (!currentUser) return;
 
+    // Fetch all users
     const usersRef = ref(db, "users");
 
     onValue(usersRef, (snapshot) => {
@@ -30,9 +32,9 @@ const UserList = ({ onSelectUser }) => {
           .filter((key) => key !== currentUser) 
           .map((key) => ({
             id: key,
-            name: userData[key].fullName || "No Name",  
-          }))
-          .sort((a, b) => a.name.localeCompare(b.name)); 
+            name: userData[key].fullName || "No Name",
+          }));
+
         setUsers(userList);
       } else {
         setUsers([]);
@@ -42,28 +44,43 @@ const UserList = ({ onSelectUser }) => {
       setLoading(false);
     });
 
-  }, [currentUser]); 
+    // Fetch recent chats for sorting
+    const recentChatsRef = ref(db, `users/${currentUser}/recentChats`);
+    onValue(recentChatsRef, (snapshot) => {
+      if (snapshot.exists()) {
+        setRecentChats(snapshot.val());
+      } else {
+        setRecentChats({});
+      }
+    });
+
+  }, [currentUser]);
+
+  // Sort users based on recent chat timestamps (latest first)
+  const sortedUsers = [...users].sort((a, b) => {
+    const timeA = recentChats[a.id] || 0;
+    const timeB = recentChats[b.id] || 0;
+    return timeB - timeA; // Sort descending by timestamp
+  });
 
   return (
     <div className="max-h-[95vh] overflow-y-auto p-4">
       {loading ? (
         <div className="flex justify-center items-center">
-          <Loader /> 
+          <Loader />
         </div>
-      ) : users.length > 0 ? (
-        users.map((user) => (
+      ) : sortedUsers.length > 0 ? (
+        sortedUsers.map((user) => (
           <div
             key={user.id}
             className="flex items-center p-4 mb-4 border-b border-gray-300 cursor-pointer hover:bg-gray-200"
             onClick={() => onSelectUser(user.id)}
           >
-
             <div className="w-10 h-10 flex items-center justify-center bg-yellow-500 text-black rounded-full mr-4">
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div>
               <p className="font-semibold">{user.name}</p>
-              <p className="text-sm text-gray-500">{user.email}</p>
             </div>
           </div>
         ))
