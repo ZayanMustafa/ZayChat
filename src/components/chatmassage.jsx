@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { db, ref, onValue, push } from "../firebase/initialization";
-import { FaCommentAlt } from "react-icons/fa"; // Importing conversation icon
+import { FaCommentAlt } from "react-icons/fa"; 
 
 const ChatMessages = ({ senderId, receiverId }) => {
   const [messages, setMessages] = useState([]);
