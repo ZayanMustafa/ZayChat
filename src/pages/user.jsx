@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import { } from "firebase/auth";
 import { db, ref, get , push,serverTimestamp , onAuthStateChanged, getAuth } from "../firebase/initialization";
 import UserList from "../components/userlist";
 import ChatMessages from "../components/chatmassage";
